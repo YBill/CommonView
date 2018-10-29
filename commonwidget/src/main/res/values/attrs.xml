@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ShapedImageView">
+        <attr name="round_radius_left_top" format="dimension" />
+        <attr name="round_radius_right_top" format="dimension" />
+        <attr name="round_radius_right_bottom" format="dimension" />
+        <attr name="round_radius_left_bottom" format="dimension" />
+        <attr name="round_radius" format="dimension" />
+        <attr name="img_border_width" format="dimension" />
+        <attr name="img_border_color" format="color" />
+        <attr name="shape_mode" format="enum">
+            <enum name="none" value="0" />
+            <enum name="round_rect" value="1" />
+            <enum name="circle" value="2" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="ExpandableTextView">
+        <attr name="maxCollapsedLines" format="integer" />
+        <attr name="animDuration" format="integer" />
+        <attr name="animAlphaStart" format="float" />
+        <attr name="expandDrawable" format="reference" />
+        <attr name="collapseDrawable" format="reference" />
+        <attr name="expandMsg" format="string" />
+        <attr name="collapseMsg" format="string" />
+        <attr name="showEnd" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="EllipsizeEndTextView">
+        <attr name="maxLine" format="integer" />
+        <attr name="collapsingText" format="string" />
+        <attr name="collapsingColor" format="reference|color" />
+    </declare-styleable>
+
+    <declare-styleable name="AutoScaleImageView">
+        <attr name="height_aspect_ratio" format="float"/>
+    </declare-styleable>
+</resources>
