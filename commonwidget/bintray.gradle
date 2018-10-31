@@ -14,7 +14,8 @@ install {
             project {
                 packaging 'aar'
                 // Add your description here
-                name 'Android general purpose component.'
+                name 'commonwidget'
+                description 'Android general purpose component.'
                 url siteUrl
                 // Set your license
                 licenses {
@@ -25,7 +26,7 @@ install {
                 }
                 developers {
                     developer {
-                        id 'YBill'     //填写的一些基本信息
+                        id 'ybill'     //填写的一些基本信息
                         name 'YBill'
                         email 'ywbandroid@gmail.com'
                     }
@@ -64,7 +65,7 @@ bintray {
     configurations = ['archives']
     pkg {
         repo = "maven"
-        name = "ScanProj"   //发布到JCenter上的项目名字
+        name = "widget"   //发布到JCenter上的项目名字
         websiteUrl = siteUrl
         vcsUrl = gitUrl
         licenses = ["Apache-2.0"]
