@@ -26,7 +26,8 @@ install {
                 }
                 developers {
                     developer {
-                        id 'ybill'     //填写的一些基本信息
+                        //填写的一些基本信息
+                        id 'ybill'
                         name 'YBill'
                         email 'ywbandroid@gmail.com'
                     }
@@ -64,16 +65,16 @@ bintray {
     key = properties.getProperty("bintray.apikey")
     configurations = ['archives']
     pkg {
-        repo = "maven"
-        name = "widget"   //发布到JCenter上的项目名字
+        repo = "maven" // 自己创建的仓库名字，要跟Bintray上创建的仓库一样
+        name = "widget" //上传到JCenter的package的名字
         websiteUrl = siteUrl
         vcsUrl = gitUrl
         licenses = ["Apache-2.0"]
-        publish = true
+        publish = true // 是否是公开项目，公开别人可以引用
     }
 }
 javadoc { //jav doc采用utf-8编码否则会报“GBK的不可映射字符”错误
-    options{
+    options {
         encoding "UTF-8"
         charSet 'UTF-8'
     }
