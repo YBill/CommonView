@@ -3,35 +3,36 @@ package com.bill.commonwidget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.widget.LinearLayout;
 
 /**
  * Created by Bill on 18/5/21.
- * 图片宽高按宽比例
+ * LinearLayout 宽高动态按比例绘制
  */
-public class AutoScaleImageView extends ShapedImageView {
+public class AutoScaleLinearLayout extends LinearLayout {
 
-    private float width_relative_layout_width_aspect_ratio = 1; // 宽相对于屏幕宽的占比
-    private float height_relative_width_aspect_ratio = 1; // 高相对于宽的占比
+    private float width_relative_layout_width_aspect_ratio = -1; // 宽相对于屏幕宽的占比
+    private float height_relative_width_aspect_ratio = -1; // 高相对于宽的占比
 
-    public AutoScaleImageView(Context context, AttributeSet attrs, int defStyle) {
+    public AutoScaleLinearLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(context, attrs);
     }
 
-    public AutoScaleImageView(Context context, AttributeSet attrs) {
+    public AutoScaleLinearLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public AutoScaleImageView(Context context) {
+    public AutoScaleLinearLayout(Context context) {
         super(context);
         init(context, null);
     }
 
     private void init(Context context, AttributeSet attrs) {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.AutoScaleView);
-        width_relative_layout_width_aspect_ratio = a.getFloat(R.styleable.AutoScaleView_width_relative_layout_width_aspect_ratio, 1);
-        height_relative_width_aspect_ratio = a.getFloat(R.styleable.AutoScaleView_height_relative_width_aspect_ratio, 1);
+        width_relative_layout_width_aspect_ratio = a.getFloat(R.styleable.AutoScaleView_width_relative_layout_width_aspect_ratio, -1);
+        height_relative_width_aspect_ratio = a.getFloat(R.styleable.AutoScaleView_height_relative_width_aspect_ratio, -1);
         a.recycle();
     }
 

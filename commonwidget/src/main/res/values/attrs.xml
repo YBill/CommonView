@@ -32,7 +32,8 @@
         <attr name="collapsingColor" format="reference|color" />
     </declare-styleable>
 
-    <declare-styleable name="AutoScaleImageView">
-        <attr name="height_aspect_ratio" format="float"/>
+    <declare-styleable name="AutoScaleView">
+        <attr name="width_relative_layout_width_aspect_ratio" format="float"/>
+        <attr name="height_relative_width_aspect_ratio" format="float"/>
     </declare-styleable>
 </resources>
