@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
@@ -43,6 +44,10 @@ public class ShapedImageView extends android.support.v7.widget.AppCompatImageVie
     private Paint strokePaint;
     private float mBorderWidth; //描边的宽度
     private int mBorderColor; //描边颜色
+    private Path mBorderPath;
+    private float indent; // 缩进，画描边
+    private RectF mBorderRect;
+    private float[] mBorderRadius = new float[8];
 
     public ShapedImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -78,14 +83,10 @@ public class ShapedImageView extends android.support.v7.widget.AppCompatImageVie
                         float rightTop = a.getDimension(R.styleable.ShapedImageView_round_radius_right_top, DEFAULT_RADIUS);
                         float rightBottom = a.getDimension(R.styleable.ShapedImageView_round_radius_right_bottom, DEFAULT_RADIUS);
                         float leftBottom = a.getDimension(R.styleable.ShapedImageView_round_radius_left_bottom, DEFAULT_RADIUS);
-                        mCornerRadius[0] = leftTop;
-                        mCornerRadius[1] = leftTop;
-                        mCornerRadius[2] = rightTop;
-                        mCornerRadius[3] = rightTop;
-                        mCornerRadius[4] = rightBottom;
-                        mCornerRadius[5] = rightBottom;
-                        mCornerRadius[6] = leftBottom;
-                        mCornerRadius[7] = leftBottom;
+                        mCornerRadius[0] = mCornerRadius[1] = leftTop;
+                        mCornerRadius[2] = mCornerRadius[3] = rightTop;
+                        mCornerRadius[4] = mCornerRadius[5] = rightBottom;
+                        mCornerRadius[6] = mCornerRadius[7] = leftBottom;
                     }
                     break;
             }
@@ -99,11 +100,17 @@ public class ShapedImageView extends android.support.v7.widget.AppCompatImageVie
 
         // 描边
         if (mBorderWidth > 0) {
+            mBorderPath = new Path();
+            mBorderRect = new RectF();
             strokePaint = new Paint();
             strokePaint.setStyle(Paint.Style.STROKE);
             strokePaint.setColor(mBorderColor);
             strokePaint.setAntiAlias(true);
             strokePaint.setStrokeWidth(mBorderWidth);
+            indent = mBorderWidth / 2; // 缩进线的一半，要不线会绘制一半
+            for (int i = 0; i < mCornerRadius.length; i++) {
+                mBorderRadius[i] = mCornerRadius[i] - indent;
+            }
         }
     }
 
@@ -146,10 +153,10 @@ public class ShapedImageView extends android.support.v7.widget.AppCompatImageVie
             float radius = (min - mBorderWidth) / 2; // 半径
             canvas.drawCircle(center, center, radius, strokePaint);
         } else {
-            float indent = mBorderWidth / 2; // 缩进线的一半，要不线会绘制一半
-            RectF targetRect = new RectF(0, 0, width, height);
-            targetRect.inset(indent, indent);
-            canvas.drawRoundRect(targetRect, mCornerRadius[0] - indent, mCornerRadius[0] - indent, strokePaint);
+            mBorderRect.set(0, 0, width, height);
+            mBorderRect.inset(indent, indent);
+            mBorderPath.addRoundRect(mBorderRect, mBorderRadius, Path.Direction.CCW);
+            canvas.drawPath(mBorderPath, strokePaint);
         }
 
         canvas = null;
