@@ -131,13 +131,17 @@ public class RoundImageView extends android.support.v7.widget.AppCompatImageView
 
             setUpShader();
 
-            if (mShapeMode == ImageType.MODE_ROUND_RECT) {
-                mRoundRect.set(0, 0, getWidth(), getHeight());
-                mImagePath.addRoundRect(mRoundRect, mCornerRadius, Path.Direction.CCW);
-                canvas.drawPath(mImagePath, mBitmapPaint);
+            if (mBitmapPaint.getShader() == null) {
+                super.onDraw(canvas);
             } else {
-                float mRadius = getWidth() / 2;
-                canvas.drawCircle(mRadius, mRadius, mRadius, mBitmapPaint);
+                if (mShapeMode == ImageType.MODE_ROUND_RECT) {
+                    mRoundRect.set(0, 0, getWidth(), getHeight());
+                    mImagePath.addRoundRect(mRoundRect, mCornerRadius, Path.Direction.CCW);
+                    canvas.drawPath(mImagePath, mBitmapPaint);
+                } else {
+                    float mRadius = getWidth() / 2;
+                    canvas.drawCircle(mRadius, mRadius, mRadius, mBitmapPaint);
+                }
             }
         }
 
@@ -171,6 +175,9 @@ public class RoundImageView extends android.support.v7.widget.AppCompatImageView
         }
 
         Bitmap bitmap = drawableToBitmap(drawable);
+        if (bitmap == null)
+            return;
+
         mBitmapShader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
 
         int imgWidth = bitmap.getWidth();
@@ -216,6 +223,9 @@ public class RoundImageView extends android.support.v7.widget.AppCompatImageView
         }
         int w = drawable.getIntrinsicWidth();
         int h = drawable.getIntrinsicHeight();
+        if (w <= 0 || h <= 0) {
+            return null;
+        }
         Bitmap.Config config = drawable.getOpacity() != PixelFormat.OPAQUE
                 ? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565;
         Bitmap bitmap = Bitmap.createBitmap(w, h, config);
