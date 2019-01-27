@@ -59,9 +59,6 @@ public class ShapedImageView extends android.support.v7.widget.AppCompatImageVie
     }
 
     private void init(AttributeSet attrs) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            setLayerType(LAYER_TYPE_HARDWARE, null);
-        }
         if (attrs != null) {
             TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ShapedImageView);
             mShapeMode = a.getInt(R.styleable.ShapedImageView_shape_mode, ImageType.MODE_NONE);
@@ -87,11 +84,16 @@ public class ShapedImageView extends android.support.v7.widget.AppCompatImageVie
             a.recycle();
         }
 
-        mPaint = new Paint();
-        mPaint.setAntiAlias(true);
-        mPaint.setFilterBitmap(true);
-        mPaint.setColor(Color.BLACK);
-        mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
+        if (mShapeMode != ImageType.MODE_NONE) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                setLayerType(LAYER_TYPE_HARDWARE, null);
+            }
+            mPaint = new Paint();
+            mPaint.setAntiAlias(true);
+            mPaint.setFilterBitmap(true);
+            mPaint.setColor(Color.BLACK);
+            mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
+        }
 
         // 描边
         if (mBorderWidth > 0) {

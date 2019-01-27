@@ -87,11 +87,13 @@ public class RoundImageView extends android.support.v7.widget.AppCompatImageView
             a.recycle();
         }
 
-        mRoundRect = new RectF();
-        mImagePath = new Path();
-        mMatrix = new Matrix();
-        mBitmapPaint = new Paint();
-        mBitmapPaint.setAntiAlias(true);
+        if (mShapeMode != ImageType.MODE_NONE) {
+            mRoundRect = new RectF();
+            mImagePath = new Path();
+            mMatrix = new Matrix();
+            mBitmapPaint = new Paint();
+            mBitmapPaint.setAntiAlias(true);
+        }
 
         // 描边
         if (mBorderWidth > 0) {
