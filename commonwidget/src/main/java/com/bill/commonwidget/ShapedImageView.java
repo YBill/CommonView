@@ -12,7 +12,6 @@ import android.graphics.RectF;
 import android.graphics.drawable.shapes.RoundRectShape;
 import android.graphics.drawable.shapes.Shape;
 import android.os.Build;
-import android.support.annotation.IntDef;
 import android.util.AttributeSet;
 
 import java.util.Arrays;
@@ -22,26 +21,21 @@ import java.util.Arrays;
  * <p>
  * 可以指定某个角进行圆角
  * 可以指定圆和圆角图片描边
- * 描边只能是圆或为四个圆角描边角度一样
+ * 描边角度跟随圆角走
+ * <p>
+ * 使用版本：[Android 3.0, Android 9.0)
  */
 public class ShapedImageView extends android.support.v7.widget.AppCompatImageView {
 
-    @IntDef({ShapedMode.SHAPE_MODE_NONE, ShapedMode.SHAPE_MODE_ROUND_RECT, ShapedMode.SHAPE_MODE_CIRCLE})
-    public @interface ShapedMode {
-        int SHAPE_MODE_NONE = 0;
-        int SHAPE_MODE_ROUND_RECT = 1;
-        int SHAPE_MODE_CIRCLE = 2;
-    }
-
-    public static final float DEFAULT_RADIUS = 0f;
+    private static final float DEFAULT_RADIUS = 0f;
 
     private Paint mPaint;
     private Shape mShape;
-    @ShapedMode
+    @ImageType
     private int mShapeMode = 0;
     private final float[] mCornerRadius = new float[8];
 
-    private Paint strokePaint;
+    private Paint mBorderPaint;
     private float mBorderWidth; //描边的宽度
     private int mBorderColor; //描边颜色
     private Path mBorderPath;
@@ -70,11 +64,11 @@ public class ShapedImageView extends android.support.v7.widget.AppCompatImageVie
         }
         if (attrs != null) {
             TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ShapedImageView);
-            mShapeMode = a.getInt(R.styleable.ShapedImageView_shape_mode, ShapedMode.SHAPE_MODE_NONE);
+            mShapeMode = a.getInt(R.styleable.ShapedImageView_shape_mode, ImageType.MODE_NONE);
             mBorderWidth = a.getDimension(R.styleable.ShapedImageView_img_border_width, 0);
             mBorderColor = a.getColor(R.styleable.ShapedImageView_img_border_color, 0xffffffff);
             switch (mShapeMode) {
-                case ShapedMode.SHAPE_MODE_ROUND_RECT:
+                case ImageType.MODE_ROUND_RECT:
                     float mRadius = a.getDimension(R.styleable.ShapedImageView_round_radius, -1);
                     if (mRadius != -1) {
                         Arrays.fill(mCornerRadius, mRadius);
@@ -92,6 +86,7 @@ public class ShapedImageView extends android.support.v7.widget.AppCompatImageVie
             }
             a.recycle();
         }
+
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mPaint.setFilterBitmap(true);
@@ -102,11 +97,11 @@ public class ShapedImageView extends android.support.v7.widget.AppCompatImageVie
         if (mBorderWidth > 0) {
             mBorderPath = new Path();
             mBorderRect = new RectF();
-            strokePaint = new Paint();
-            strokePaint.setStyle(Paint.Style.STROKE);
-            strokePaint.setColor(mBorderColor);
-            strokePaint.setAntiAlias(true);
-            strokePaint.setStrokeWidth(mBorderWidth);
+            mBorderPaint = new Paint();
+            mBorderPaint.setStyle(Paint.Style.STROKE);
+            mBorderPaint.setColor(mBorderColor);
+            mBorderPaint.setAntiAlias(true);
+            mBorderPaint.setStrokeWidth(mBorderWidth);
             indent = mBorderWidth / 2; // 缩进线的一半，要不线会绘制一半
             for (int i = 0; i < mCornerRadius.length; i++) {
                 mBorderRadius[i] = mCornerRadius[i] - indent;
@@ -117,11 +112,11 @@ public class ShapedImageView extends android.support.v7.widget.AppCompatImageVie
     @Override
     protected void onDraw(Canvas canvas) {
         switch (mShapeMode) {
-            case ShapedMode.SHAPE_MODE_NONE:
+            case ImageType.MODE_NONE:
                 super.onDraw(canvas);
                 break;
-            case ShapedMode.SHAPE_MODE_ROUND_RECT:
-            case ShapedMode.SHAPE_MODE_CIRCLE:
+            case ImageType.MODE_ROUND_RECT:
+            case ImageType.MODE_CIRCLE:
                 int saveCount = canvas.getSaveCount();
                 canvas.save();
                 super.onDraw(canvas);
@@ -135,43 +130,42 @@ public class ShapedImageView extends android.support.v7.widget.AppCompatImageVie
         drawBorder(canvas, this.getWidth(), this.getHeight());
     }
 
-    /**
-     * 描边
-     *
-     * @param canvas
-     * @param width  图片宽
-     * @param height 图片高
-     */
     private void drawBorder(Canvas canvas, float width, float height) {
         if (mBorderWidth <= 0) {
             return;
         }
 
-        if (mShapeMode == ShapedMode.SHAPE_MODE_CIRCLE) {
-            float min = Math.min(getWidth(), getHeight());
-            float center = min / 2; // 圆心
-            float radius = (min - mBorderWidth) / 2; // 半径
-            canvas.drawCircle(center, center, radius, strokePaint);
+        if (mShapeMode == ImageType.MODE_CIRCLE) {
+            float imgSize = getWidth(); // 圆的宽=高
+            float center = imgSize / 2; // 圆心
+            float radius = (imgSize - mBorderWidth) / 2; // 半径
+            canvas.drawCircle(center, center, radius, mBorderPaint);
         } else {
             mBorderRect.set(0, 0, width, height);
             mBorderRect.inset(indent, indent);
             mBorderPath.addRoundRect(mBorderRect, mBorderRadius, Path.Direction.CCW);
-            canvas.drawPath(mBorderPath, strokePaint);
+            canvas.drawPath(mBorderPath, mBorderPaint);
         }
 
         canvas = null;
     }
 
     @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        if (mShapeMode == ImageType.MODE_CIRCLE) {
+            int min = Math.min(getMeasuredWidth(), getMeasuredHeight());
+            float radius = (float) min / 2;
+            Arrays.fill(mCornerRadius, radius);
+            setMeasuredDimension(min, min);
+        }
+    }
+
+    @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
         if (changed) {
-            if (mShapeMode == ShapedMode.SHAPE_MODE_CIRCLE) {
-                int min = Math.min(getWidth(), getHeight());
-                float radius = (float) min / 2;
-                Arrays.fill(mCornerRadius, radius);
-            }
-            if (mShapeMode != ShapedMode.SHAPE_MODE_NONE) {
+            if (mShapeMode != ImageType.MODE_NONE) {
                 if (mShape == null) {
                     mShape = new RoundRectShape(mCornerRadius, null, null);
                 }
