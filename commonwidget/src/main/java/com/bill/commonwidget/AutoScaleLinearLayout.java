@@ -11,8 +11,9 @@ import android.widget.LinearLayout;
  */
 public class AutoScaleLinearLayout extends LinearLayout {
 
-    private float width_relative_layout_width_aspect_ratio = -1; // 宽相对于屏幕宽的占比
+    private float width_relative_layout_width_aspect_ratio = -1; // 宽相对于当前布局宽的占比
     private float height_relative_width_aspect_ratio = -1; // 高相对于宽的占比
+    private float child_view_interval = 0; // 当子View有多个平分屏幕时，中间添加margin，减去
 
     public AutoScaleLinearLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -33,6 +34,7 @@ public class AutoScaleLinearLayout extends LinearLayout {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.AutoScaleView);
         width_relative_layout_width_aspect_ratio = a.getFloat(R.styleable.AutoScaleView_width_relative_layout_width_aspect_ratio, -1);
         height_relative_width_aspect_ratio = a.getFloat(R.styleable.AutoScaleView_height_relative_width_aspect_ratio, -1);
+        child_view_interval = a.getDimension(R.styleable.AutoScaleView_child_view_interval, 0);
         a.recycle();
     }
 
@@ -44,7 +46,7 @@ public class AutoScaleLinearLayout extends LinearLayout {
         if (width_relative_layout_width_aspect_ratio > 0)
             width = width * width_relative_layout_width_aspect_ratio;
         if (height_relative_width_aspect_ratio > 0) {
-            height = width * height_relative_width_aspect_ratio;
+            height = (width - child_view_interval) * height_relative_width_aspect_ratio;
         } else {
             height = getMeasuredHeight();
         }

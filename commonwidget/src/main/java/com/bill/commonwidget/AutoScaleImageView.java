@@ -10,7 +10,7 @@ import android.util.AttributeSet;
  */
 public class AutoScaleImageView extends ShapedImageView {
 
-    private float width_relative_layout_width_aspect_ratio = 1; // 宽相对于屏幕宽的占比
+    private float width_relative_layout_width_aspect_ratio = 1; // 宽相对于当前布局宽的占比
     private float height_relative_width_aspect_ratio = 1; // 高相对于宽的占比
 
     public AutoScaleImageView(Context context, AttributeSet attrs, int defStyle) {

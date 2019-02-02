@@ -35,5 +35,6 @@
     <declare-styleable name="AutoScaleView">
         <attr name="width_relative_layout_width_aspect_ratio" format="float"/>
         <attr name="height_relative_width_aspect_ratio" format="float"/>
+        <attr name="child_view_interval" format="dimension" />
     </declare-styleable>
 </resources>
