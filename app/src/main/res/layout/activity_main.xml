@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#999999"
+    android:background="#fff"
     tools:context=".MainActivity">
 
     <LinearLayout
@@ -14,40 +14,25 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="200dp"
-            android:layout_height="300dp"
+        <com.bill.commonwidget.ShapedImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_marginTop="20dp"
-            android:adjustViewBounds="true"
-            android:scaleType="fitXY"
-            android:src="@drawable/zyw" />
-
-        <com.bill.commonwidget.RoundImageView
-            android:id="@+id/image"
-            android:layout_width="200dp"
-            android:layout_height="300dp"
-            android:layout_marginTop="20dp"
-            android:adjustViewBounds="true"
-            android:scaleType="fitXY"
+            android:scaleType="centerCrop"
             android:src="@drawable/zyw"
-            app:img_border_color="@color/colorAccent"
-            app:img_border_width="1dp"
-            app:round_radius_left_bottom="@dimen/d_10"
-            app:round_radius_right_top="@dimen/d_10"
-            app:shape_mode="round_rect" />
+            app:img_border_color="#fff"
+            app:img_border_width="5dp"
+            app:shape_mode="circle" />
 
         <com.bill.commonwidget.ShapedImageView
-            android:layout_width="200dp"
-            android:layout_height="300dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_marginTop="20dp"
-            android:adjustViewBounds="true"
-            android:scaleType="fitXY"
-            android:src="@drawable/zyw"
-            app:img_border_color="@color/colorAccent"
-            app:img_border_width="1dp"
-            app:round_radius_left_bottom="@dimen/d_10"
-            app:round_radius_right_top="@dimen/d_10"
-            app:shape_mode="round_rect" />
+            android:scaleType="centerCrop"
+            android:src="#ff0000"
+            app:img_border_color="#fff"
+            app:img_border_width="5dp"
+            app:shape_mode="circle" />
 
     </LinearLayout>
 

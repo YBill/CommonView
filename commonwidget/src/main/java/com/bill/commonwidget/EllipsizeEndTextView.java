@@ -15,6 +15,7 @@ import android.util.AttributeSet;
 
 /**
  * Created by Bill on 2018/9/21.
+ * 正文末尾添加全文，不可展开
  */
 
 public class EllipsizeEndTextView extends android.support.v7.widget.AppCompatTextView {

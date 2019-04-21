@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:expandableTextView="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    android:orientation="vertical">
+
+    <com.bill.commonwidget.ExpandableTextView
+        android:id="@+id/expand_text_view2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/d_10"
+        android:orientation="vertical"
+        expandableTextView:collapseDrawable="@mipmap/icon_expand_text_close"
+        expandableTextView:collapseMsg="收起"
+        expandableTextView:expandDrawable="@mipmap/icon_expand_text_open"
+        expandableTextView:expandMsg="展开"
+        expandableTextView:maxCollapsedLines="4">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#666666"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:drawablePadding="5dp"
+            android:textColor="#63779C" />
+
+    </com.bill.commonwidget.ExpandableTextView>
+
+    <com.bill.commonwidget.EllipsizeEndTextView2
+        android:id="@+id/ctv_item_pn_dynamic_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/d_10"
+        android:lineSpacingMultiplier="1.20"
+        android:textColor="#333"
+        android:textSize="16sp"
+        expandableTextView:collapsingColor="#63779C"
+        expandableTextView:collapsingText="全文"
+        expandableTextView:maxLine="4" />
+
+    <com.bill.commonwidget.EllipsizeEndTextView
+        android:id="@+id/ellipsizeendtextview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/d_10"
+        android:lineSpacingMultiplier="1.20"
+        android:textColor="#333"
+        android:textSize="16sp"
+        expandableTextView:collapsingColor="#63779C"
+        expandableTextView:collapsingText="全文"
+        expandableTextView:maxLine="4" />
+
+</LinearLayout>

@@ -33,8 +33,14 @@
     </declare-styleable>
 
     <declare-styleable name="AutoScaleView">
-        <attr name="width_relative_layout_width_aspect_ratio" format="float"/>
-        <attr name="height_relative_width_aspect_ratio" format="float"/>
+        <attr name="width_relative_layout_width_aspect_ratio" format="float" />
+        <attr name="height_relative_width_aspect_ratio" format="float" />
         <attr name="child_view_interval" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="HorizontalSquareLayout">
+        <attr name="square_aspect_ratio" format="float" />
+        <attr name="square_interval" format="dimension" />
+        <attr name="square_basis_num" format="integer" />基础
     </declare-styleable>
 </resources>

@@ -2,6 +2,7 @@ package com.bill.commonwidget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -23,7 +24,6 @@ import java.util.Arrays;
  * 可以指定圆和圆角图片描边
  * 描边角度跟随圆角走
  * <p>
- * 使用版本：[Android 3.0, Android 9.0)
  */
 public class ShapedImageView extends android.support.v7.widget.AppCompatImageView {
 
@@ -119,13 +119,20 @@ public class ShapedImageView extends android.support.v7.widget.AppCompatImageVie
                 break;
             case ImageType.MODE_ROUND_RECT:
             case ImageType.MODE_CIRCLE:
-                int saveCount = canvas.getSaveCount();
-                canvas.save();
-                super.onDraw(canvas);
-                if (mShape != null) {
-                    mShape.draw(canvas, mPaint);
+                if (Build.VERSION.SDK_INT >= 28) {
+                    super.onDraw(canvas);
+                    makeShapeBitmap();
+                    if (mShapeBitmap != null && !mShapeBitmap.isRecycled())
+                        canvas.drawBitmap(mShapeBitmap, 0, 0, mPaint);
+                } else {
+                    int saveCount = canvas.getSaveCount();
+                    canvas.save();
+                    super.onDraw(canvas);
+                    if (mShape != null) {
+                        mShape.draw(canvas, mPaint);
+                    }
+                    canvas.restoreToCount(saveCount);
                 }
-                canvas.restoreToCount(saveCount);
                 break;
         }
 
@@ -140,7 +147,7 @@ public class ShapedImageView extends android.support.v7.widget.AppCompatImageVie
         if (mShapeMode == ImageType.MODE_CIRCLE) {
             float imgSize = getWidth(); // 圆的宽=高
             float center = imgSize / 2; // 圆心
-            float radius = (imgSize - mBorderWidth) / 2; // 半径
+            float radius = (imgSize - mBorderWidth) / 2 + 0.5f; // 半径
             canvas.drawCircle(center, center, radius, mBorderPaint);
         } else {
             mBorderRect.set(0, 0, width, height);
@@ -174,6 +181,38 @@ public class ShapedImageView extends android.support.v7.widget.AppCompatImageVie
                 mShape.resize(getWidth(), getHeight());
             }
         }
+    }
+
+    private Bitmap mShapeBitmap;
+
+    private void makeShapeBitmap() {
+        if (mShapeBitmap == null || mShapeBitmap.isRecycled()) {
+            int w = getMeasuredWidth();
+            int h = getMeasuredHeight();
+
+            if (w == 0 || h == 0) return;
+
+            releaseBitmap(mShapeBitmap);
+
+            mShapeBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+            Canvas c = new Canvas(mShapeBitmap);
+            Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
+            p.setColor(Color.BLACK);
+            mShape.draw(c, p);
+        }
+    }
+
+    private void releaseBitmap(Bitmap bitmap) {
+        if (bitmap != null && !bitmap.isRecycled()) {
+            bitmap.recycle();
+        }
+    }
+
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        releaseBitmap(mShapeBitmap);
     }
 
 }

@@ -22,7 +22,7 @@ import android.widget.TextView;
 /**
  * The original address : https://github.com/Manabu-GT/ExpandableTextView.git
  * <p>
- * 在上面的项目上修改
+ * 在上面的项目上修改(只能在文字的右边或下面添加展开按钮，展开收起有动画)
  */
 
 public class ExpandableTextView extends LinearLayout implements View.OnClickListener {
