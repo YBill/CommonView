@@ -152,6 +152,7 @@ public class ShapedImageView extends android.support.v7.widget.AppCompatImageVie
         } else {
             mBorderRect.set(0, 0, width, height);
             mBorderRect.inset(indent, indent);
+            mBorderPath.reset();
             mBorderPath.addRoundRect(mBorderRect, mBorderRadius, Path.Direction.CCW);
             canvas.drawPath(mBorderPath, mBorderPaint);
         }
