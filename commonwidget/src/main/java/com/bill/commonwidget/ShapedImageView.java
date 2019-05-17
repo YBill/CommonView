@@ -164,10 +164,12 @@ public class ShapedImageView extends android.support.v7.widget.AppCompatImageVie
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         if (mShapeMode == ImageType.MODE_CIRCLE) {
-            int min = Math.min(getMeasuredWidth(), getMeasuredHeight());
-            float radius = (float) min / 2;
-            Arrays.fill(mCornerRadius, radius);
-            setMeasuredDimension(min, min);
+//            int min = Math.min(getMeasuredWidth(), getMeasuredHeight());
+//            float radius = (float) min / 2;
+//            Arrays.fill(mCornerRadius, radius);
+//            setMeasuredDimension(min, min);
+
+            Arrays.fill(mCornerRadius, getMeasuredWidth());
         }
     }
 
