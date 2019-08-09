@@ -4,7 +4,7 @@
 ### 一、使用
 
 ```
-implementation 'com.bill.commonwidget:commonwidget:1.0.1'
+implementation 'com.bill.commonwidget:commonwidget:1.0.2'
 ```
 
 ### 一、功能
